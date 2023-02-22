@@ -45,7 +45,9 @@ def execute_statement(cursor, statement, args=[]):
         results = cursor.fetchall()
         return results
     except mariadb.ProgrammingError as e:
-        print ("Syntax error in your sql statement:", e)
+        if "doesn't have a result set" in e.msg:
+            return None
+        print ("Syntax error in your SQL statement:", e)
         return str(e)
     except mariadb.IntegrityError as e:
         print("The statement failed to execute due to integrity error:",e)
@@ -54,7 +56,7 @@ def execute_statement(cursor, statement, args=[]):
         print("DATA ERROR:", e)
         return str(e)
     except Exception as e:
-        print("Soemthing went wrong:",e)
+        print("Something went wrong:",e)
         return str(e)
 
 #! """

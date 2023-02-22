@@ -34,20 +34,20 @@ def post_client():
     else:
         return "Some went wrong!"
     
-    
+
 @app.patch('/api/client')
 def patch_client():
-    id = request.json.get("userId")
-    username = request.json.get("userName")
-    first_name = request.json.get("firstName")
-    last_name = request.json.get("lastName")
-    email = request.json.get("email")
-    password = request.json.get("password")
-    result = run_statement("CALL post_client(?,?,?,?,?)", [id, username, first_name, last_name, email, password])
+    id = request.json.get('userId')
+    username = request.json.get('userName')
+    first_name = request.json.get('firstName')
+    last_name = request.json.get('lastName')
+    email = request.json.get('email')
+    password = request.json.get('password')
+    result = run_statement("CALL patch_client(?,?,?,?,?,?)", [id, username, first_name, last_name, email, password])
     if result == None:
-        return "All good"
+        return make_response(jsonify("Post updated Successfully"),200)
     else:
-        return "Some went wrong!"
+        return make_response(jsonify("Something went wrong!"),500)
 
 
 @app.delete('/api/client')
@@ -57,9 +57,9 @@ def delete_client():
         return "You must enter a valid user ID"
     result = run_statement("CALL delete_client(?)", [id])
     if result == None:
-        return "Deleted!"
+        return make_response(jsonify("Post deleted Successfully"),200)
     else:
-        return "Something went wrong"
+        return make_response(jsonify("Something went wrong!"), 500)
 
 
     # app.run(debug = True)
