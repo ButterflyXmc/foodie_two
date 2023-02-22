@@ -16,11 +16,11 @@ def get():
 def post():
     return c.post_client()
 
-@app.get('/api/client')
+@app.patch('/api/client')
 def patch():
     return c.patch_client()
 
-@app.get('/api/client')
+@app.delete('/api/client')
 def delete():
     return c.delete_client()
 
