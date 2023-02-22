@@ -1,5 +1,5 @@
 from flask import Flask, request, make_response, jsonify
-from dbhelpers import run_statement
+from helpers.dbhelpers import run_statement
 from dbcreds import production_mode
 
 app = Flask(__name__)
