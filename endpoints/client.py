@@ -1,9 +1,8 @@
 from flask import Flask, request, make_response, jsonify
 from helpers.dbhelpers import run_statement
 from dbcreds import production_mode
-
-app = Flask(__name__)
-
+from app import app
+#Importing app from app as only a single app object is allowed
 
 @app.get('/api/client')
 def get_client():
@@ -62,15 +61,3 @@ def delete_client():
         return make_response(jsonify("Something went wrong!"), 500)
 
 
-    # app.run(debug = True)
-if (production_mode == True):
-    print("Running server in prductioin mode")
-    import bjoern #type:ignore
-    bjoern.run(app, "0.0.0.0", 5000)
-    # NON-production case
-else:
-    print("Running testing mode")
-    # adding CROS so it will accept requests from different origins
-    from flask_cors import CORS
-    CORS(app)
-    app.run(debug=True)
