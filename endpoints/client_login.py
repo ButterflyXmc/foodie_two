@@ -5,7 +5,7 @@ from app import app
 
 # !NEED UUID, WILL COME BACK LATER
 
-@app.get('/api/client-login')
+@app.post('/api/client-login')
 def client_login():
     client_id = request.json.get("userId")
     token = request.json.get("token")

@@ -2,6 +2,7 @@ from flask import Flask, request, make_response, jsonify
 from helpers.dbhelpers import run_statement
 from dbcreds import production_mode
 from app import app
+import bcrypt
 #Importing app from app as only a single app object is allowed
 
 @app.get('/api/client')
@@ -27,7 +28,9 @@ def post_client():
     last_name = request.json.get("lastName")
     email = request.json.get("email")
     password = request.json.get("password")
-    result = run_statement("CALL post_client(?,?,?,?,?)", [username, first_name, last_name, email, password])
+    salt = bcrypt.gensalt()
+    hash_result = bcrypt.hashpw(password.encode(), salt)
+    result = run_statement("CALL post_client(?,?,?,?,?)", [username, first_name, last_name, email, hash_result])
     if result == None:
         return "All good"
     else:

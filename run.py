@@ -1,6 +1,9 @@
+
+#!..................... WILL BE RUNNING THIS FILE............................!
 from dbcreds import production_mode
 from flask_cors import CORS
 from app import app
+
 
     # app.run(debug = True)
 if (production_mode == True):
