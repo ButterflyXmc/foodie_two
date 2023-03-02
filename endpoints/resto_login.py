@@ -20,7 +20,7 @@ def resto_login():
     
 
 @app.delete('/api/restaurant-login')
-def logout():
+def resto_logout():
     token = request.json.get("token")
     result = run_statement("CALL delete_resto_login(?)", [token])
     if result == None:
