@@ -3,6 +3,7 @@ from helpers.dbhelpers import run_statement
 from dbcreds import production_mode
 from app import app
 import bcrypt
+import uuid
 #Importing app from app as only a single app object is allowed
 
 @app.get('/api/client')
@@ -31,8 +32,9 @@ def post_client():
     salt = bcrypt.gensalt()
     hash_result = bcrypt.hashpw(password.encode(), salt)
     result = run_statement("CALL post_client(?,?,?,?,?)", [username, first_name, last_name, email, hash_result])
-    if result == None:
-        return "All good"
+    if (type(result)== list):
+        if result == []:
+            return make_response(jsonify("Please try again!"), 500)
     else:
         return "Some went wrong!"
     
@@ -62,5 +64,3 @@ def delete_client():
         return make_response(jsonify("Post deleted Successfully"),200)
     else:
         return make_response(jsonify("Something went wrong!"), 500)
-
-
