@@ -35,9 +35,14 @@ def post_resto():
     bio = request.json.get("bio")
     result = run_statement("CALL post_resto(?,?,?,?,?,?,?)", [name, address, city, email, phone_num, hash_result, bio])
     if result == None:
-        return "All good"
+        return make_response(jsonify("Signed up successfully"), 200)
+    elif "for key 'restaurant_UN_email'" in result:
+        return "This email is already registered. Please login or choose a different email."
+    elif "for key 'restaurant_UN_phone_num'" in result:
+        return "This number is already in use. Please use a different phone number"
+    
     else:
-        return "Some went wrong!"
+        return make_response(jsonify(result), 500)
     
 
 @app.patch('/api/restaurant')
@@ -54,6 +59,6 @@ def patch_resto():
     profile_url = request.json.get('profileUrl')
     result = run_statement("CALL patch_resto(?,?,?,?,?,?,?,?,?,?", [id, name, address, city, email, phone_num, password, bio, banner_url, profile_url])
     if result == None:
-        return make_response(jsonify("Post updated Successfully"),200)
+        return make_response(jsonify("Account updated Successfully"),200)
     else:
         return make_response(jsonify("Something went wrong!"),500)

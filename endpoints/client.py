@@ -13,6 +13,8 @@ def get_client():
     keys = ["Id", "username", "first_name", "last_name", "email", "password", "created_at"]
     result = []
     if(type(get_client) == list):
+        if id_input == None:
+            return "You must enter a valid user ID"
         for client in get_client:
             zipped = zip(keys, client)
             result.append(dict(zipped))
@@ -32,11 +34,14 @@ def post_client():
     salt = bcrypt.gensalt()
     hash_result = bcrypt.hashpw(password.encode(), salt)
     result = run_statement("CALL post_client(?,?,?,?,?)", [username, first_name, last_name, email, hash_result])
-    if (type(result)== list):
-        if result == []:
-            return make_response(jsonify("Please try again!"), 500)
+    if result == None:
+        return make_response(jsonify("Signed up successfully"), 200)
+    elif "for key 'client_UN_username'" in result:
+        return "This username is already taken, please choose a different username."
+    elif "for key 'client_UN_email'" in result:
+        return "This email is already registered. Please login or choose a different email."
     else:
-        return "Some went wrong!"
+        return make_response(jsonify(result), 500)
     
 
 @app.patch('/api/client')
@@ -49,7 +54,7 @@ def patch_client():
     password = request.json.get('password')
     result = run_statement("CALL patch_client(?,?,?,?,?,?)", [id, username, first_name, last_name, email, password])
     if result == None:
-        return make_response(jsonify("Post updated Successfully"),200)
+        return make_response(jsonify("Account updated Successfully"),200)
     else:
         return make_response(jsonify("Something went wrong!"),500)
 
@@ -61,6 +66,6 @@ def delete_client():
         return "You must enter a valid user ID"
     result = run_statement("CALL delete_client(?)", [id])
     if result == None:
-        return make_response(jsonify("Post deleted Successfully"),200)
+        return make_response(jsonify("Account deleted Successfully"),200)
     else:
         return make_response(jsonify("Something went wrong!"), 500)

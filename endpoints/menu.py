@@ -27,9 +27,9 @@ def post_menu():
     restaurant_id = request.json.get("restoId")
     result = run_statement("CALL post_menu(?,?,?,?)", [name, description, price, restaurant_id])
     if result == None:
-        return "All good"
+        return make_response(jsonify("Item added successfully"), 200)
     else:
-        return "Some went wrong!"
+        return make_response(jsonify(result), 500)
     
 
 @app.patch('/api/menu')
@@ -41,9 +41,9 @@ def patch_menu():
     img = request.json.get("imgUrl")
     result = run_statement("CALL patch_menu(?,?,?,?,?)", [id, name, description, price, img])
     if result == None:
-        return "All good"
+        return make_response(jsonify("Menu updated Successfully"),200)
     else:
-        return "Some went wrong!"
+        return make_response(jsonify("Something went wrong!"),500)
     
 
 @app.delete('/api/menu')
@@ -51,7 +51,7 @@ def delete_menu():
     id = request.json.get("itemId")
     result = run_statement("CALL delete_menu(?)", [id])
     if result == None:
-        return "All good"
+        return make_response(jsonify("Account deleted Successfully"),200)
     else:
-        return "Some went wrong!"
+        return make_response(jsonify("Something went wrong!"), 500)
     
